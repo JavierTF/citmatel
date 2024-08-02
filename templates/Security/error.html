@@ -42,6 +42,12 @@
       color: #4b4b62;
       margin-bottom: 24px;
     }
+
+    #toggle-button {
+      cursor: pointer;
+      color: blue;
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body style="background: #ffd2d2 !important;">
@@ -55,9 +61,40 @@
       {% if error_code %}Error {{ error_code }}{% endif %} {% if error_code != 403 %}<br>Parece que hubo un problema. <br>:({% else %}<br>Acción no permitida. {% endif %}
     </h1>
     <h3 class="error-subtitle" style="text-align: center;">
-      Mientras tanto, usted puede <a href="{% url 'inicio' %}">Volver al inicio</a>.
+      Mientras tanto, usted puede <a id="volver" href="javascript:void(0);">volver a la página anterior</a>.
       <br>Contacte con el administrador del sitio
     </h3>
+    <div id="info-error-excepcion" style="display: none;">
+      {% if excepcion_info %}
+        <h3>Información de la excepción:</h3>
+        <ul>
+            {% for key, value in excepcion_info.items %}
+                <li><strong>{{ key }}:</strong> {{ value }}</li>
+            {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+    <div id="toggle-button">Mostrar/ocultar información de la excepción</div>
   </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var volver = document.getElementById('volver');
+      volver.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.history.back();
+      });
+
+      var infoErrorExcepcion = document.getElementById("info-error-excepcion");
+      var toggleButton = document.getElementById("toggle-button");
+
+      toggleButton.addEventListener("click", function() {
+          if (infoErrorExcepcion.style.display === "none") {
+              infoErrorExcepcion.style.display = "block";
+          } else {
+              infoErrorExcepcion.style.display = "none";
+          }
+      });
+    });
+  </script>
 </body>
 </html>
